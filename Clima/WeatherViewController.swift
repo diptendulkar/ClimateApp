@@ -2,12 +2,12 @@
 //  ViewController.swift
 //  WeatherApp
 //
-//  Created by Angela Yu on 23/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
 //
 
 import UIKit
 import CoreLocation
+import Alamofire
+import SwiftyJSON
 
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -45,7 +45,19 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     /***************************************************************/
     
     //Write the getWeatherData method here:
-    
+    func getWeatherdata(url: String, parameters: [String: String] ){
+        
+        Alamofire.request(url, method: .get, parameters: parameters).responseJSON{
+            response in
+            if response.result.isSuccess{
+                print("Success !! Got weather data \(response.result.description)")
+            }
+            else{
+                print("Error \(response.result.error)")
+                self.cityLabel.text = "Connection Issue"
+            }
+        }
+    }
 
     
     
@@ -89,6 +101,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             let lat = String (location.coordinate.latitude)
             
             let params : [String : String] = ["lat" : lat, "lon" : lon , "appid" : APP_ID]
+            
+            getWeatherdata(url: WEATHER_URL, parameters: params)
         }
         
     }
