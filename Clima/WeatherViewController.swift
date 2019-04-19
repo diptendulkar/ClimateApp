@@ -18,6 +18,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 
     //TODO: Declare instance variables here
     let locationManager = CLLocationManager()
+    let weatherDataModel = WeatherDataModel()
 
     
     //Pre-linked IBOutlets
@@ -50,7 +51,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON{
             response in
             if response.result.isSuccess{
-                print("Success !! Got weather data \(response.result.description)")
+               
+                
+               let  resultJSON : JSON = JSON(response.result.value)
+                 print("Success !! Got weather data \(resultJSON)")
+                self.getJSONParse(json : resultJSON)
             }
             else{
                 print("Error \(response.result.error)")
@@ -70,7 +75,21 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the updateWeatherData method here:
     
+    func getJSONParse(json : JSON){
+    
+        if let  temp = json["main"]["temp"].double {
+        weatherDataModel.temperature = Int (temp - 273.15)
+        weatherDataModel.city = json["name"].stringValue
+        weatherDataModel.condition = json["weather"][0]["id"].intValue
+        weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: json["weather"][0]["id"].intValue)
+        
+            updateUIWithWeatherData()
 
+        }
+        else{
+            cityLabel.text = "Weather Unavailable"
+        }
+    }
     
     
     
@@ -80,7 +99,13 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the updateUIWithWeatherData method here:
     
-    
+    func updateUIWithWeatherData(){
+        
+        cityLabel.text = weatherDataModel.city
+        temperatureLabel.text = "\( weatherDataModel.temperature)"
+        weatherIcon.image = UIImage(named:  weatherDataModel.weatherIconName)
+        
+    }
     
     
     
