@@ -42,4 +42,16 @@ class ChangeCityViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func nextScreen(_ sender: Any) {
+        performSegue(withIdentifier: "getToTestScreen", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "getToTestScreen"{
+        
+        let destinationVC = segue.destination as! TestViewController
+        
+        destinationVC.textPassOver = changeCityTextField.text
+        }
+    }
 }
