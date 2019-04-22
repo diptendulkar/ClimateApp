@@ -7,13 +7,15 @@ import UIKit
 
 
 //Write the protocol declaration here:
-
+protocol ChangeCityDeligate {
+    func userEnteredNewCityName ( city :  String)
+}
 
 
 class ChangeCityViewController: UIViewController {
     
     //Declare the delegate variable here:
-
+    var deligate : ChangeCityDeligate?
     
     //This is the pre-linked IBOutlets to the text field:
     @IBOutlet weak var changeCityTextField: UITextField!
@@ -23,15 +25,15 @@ class ChangeCityViewController: UIViewController {
     @IBAction func getWeatherPressed(_ sender: AnyObject) {
         
         
-        
+       
         //1 Get the city name the user entered in the text field
-        
+         let cityName  = changeCityTextField.text!
         
         //2 If we have a delegate set, call the method userEnteredANewCityName
-        
+        deligate?.userEnteredNewCityName(city: cityName)
         
         //3 dismiss the Change City View Controller to go back to the WeatherViewController
-        
+        self.dismiss(animated: true, completion: nil)
         
     }
     
