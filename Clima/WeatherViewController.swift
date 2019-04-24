@@ -102,7 +102,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     func updateUIWithWeatherData(){
         
         cityLabel.text = weatherDataModel.city
-        temperatureLabel.text = "\( weatherDataModel.temperature)"
+        // to get the degree symbol press CTR + CMD + SPACE
+        temperatureLabel.text = "\( weatherDataModel.temperature)°"
         weatherIcon.image = UIImage(named:  weatherDataModel.weatherIconName)
         
     }
@@ -149,7 +150,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     //Write the userEnteredANewCityName Delegate method here:
     
     func userEnteredNewCityName(city: String) {
-        print(city)
+        let params : [String : String] = ["q" : city, "appid" : APP_ID]
+        getWeatherdata(url: WEATHER_URL, parameters: params)
     }
     
     //Write the PrepareForSegue Method here
